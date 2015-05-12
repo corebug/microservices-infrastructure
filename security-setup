@@ -414,13 +414,10 @@ class Zookeeper(Component):
 
     def consul_ssl(self):
         "turn on consul ssl"
-        if not self.args.no_ssl:
-            with self.modify_security() as config:
-                 config.setdefault('zk_consul_ssl', 'true')
-                 config.setdefault('zk_consul_ssl_verify', 'false')
-                 print('configuring consul ssl defaults')
-        else:
-            print('disable consul ssl config')
+        with self.modify_security() as config:
+            config['zk_consul_ssl'] = not self.args.no_ssl
+            config.setdefault('zk_consul_ssl_verify', 'false')
+            print('configuring consul ssl defaults')
 
 
 class Mesos(Component):  # Mesos should always come after any frameworks
