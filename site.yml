@@ -85,3 +85,4 @@
 
 - include: hdfs.yml
 - include: spark.yml
+- include: kafka.yml

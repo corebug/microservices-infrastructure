@@ -8,3 +8,4 @@ hdfs_properties:
   - { name: "dfs.name.dir", value: "/dfs/nn" }
   - { name: "dfs.data.dir", value: "/dfs/dn" }
   - { name: "dfs.replication", value: 1 }
+  - { name: "dfs.webhdfs.enabled", value: 1 }

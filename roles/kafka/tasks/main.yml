@@ -1,0 +1,40 @@
+---
+- name: Install git package
+  sudo: true
+  yum:
+    name: git
+    state: present
+  tags:
+    - kafka
+
+- name: Download kafka-mesos repo 
+  sudo: true
+  git: 
+    repo: "{{ kafka_mesos_repo }}" 
+    dest: "{{ kafka_install_dir }}"
+  tags:
+    - kafka
+
+- name: Build kafka-mesos project 
+  sudo: true
+  command: "./gradlew jar"
+  args:
+    chdir: "{{ kafka_install_dir }}"
+    creates: "{{ kafka_install_dir }}/.gradle"
+  tags:
+    - kafka
+
+- name: Download Kafka binary
+  sudo: true 
+  get_url: 
+    url: "{{ kafka_binary_url }}"
+    dest: "{{ kafka_install_dir }}"
+  register: kafka_downloaded
+  tags:
+    - kafka 
+
+- include: scheduler.yml
+  when: kafka_downloaded | changed
+
+- include: client.yml
+  when: kafka_downloaded | changed
