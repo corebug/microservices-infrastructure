@@ -7,7 +7,7 @@
     - register cadvisor service
     - reload systemd daemon 
   tags: 
-    - cadvisor
+    - monitoring
 
 - meta: flush_handlers
 
@@ -19,7 +19,7 @@
     state: directory
     mode: 0770
   tags: 
-  - collectd
+  - monitoring
 
 - name: create collectd conf.d directory
   sudo: yes
@@ -28,7 +28,7 @@
     state: directory
     mode: 0770
   tags: 
-  - collectd
+  - monitoring
 
 - name: deploy collectd configuration files
   sudo: yes
@@ -52,7 +52,7 @@
     - src: roles/monitoring/files/syslog.conf
       dest: /etc/collectd/conf.d/syslog.conf
   tags:
-    - collectd
+    - monitoring
 
 - name: deploy collectd daemon configuration
   sudo: yes
@@ -60,7 +60,7 @@
     src: collectd.conf.j2
     dest: /etc/collectd/collectd.conf
   tags:
-    - collectd
+    - monitoring
 
 - name: deploy collectd network plugin configuration
   sudo: yes
@@ -68,7 +68,7 @@
     src: write_network.conf.j2
     dest: /etc/collectd/conf.d/write_network.conf
   tags:
-    - collectd
+    - monitoring
 
 
 - name: generate collectd systemd service file (may take a while when run first time)
@@ -80,6 +80,6 @@
     - register collectd service
     - reload systemd daemon 
   tags: 
-    - collectd
+    - monitoring
 
 - meta: flush_handlers

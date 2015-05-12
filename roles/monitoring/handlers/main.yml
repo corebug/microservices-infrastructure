@@ -3,7 +3,7 @@
   sudo: yes 
   command: /bin/systemctl daemon-reload
   tags: 
-    - cadvisor 
+    - monitoring 
 
 - name: register cadvisor service
   sudo: yes 
@@ -12,7 +12,7 @@
     name: "{{ cadvisor_service }}"
     state: started 
   tags:  
-    - cadvisor  
+    - monitoring  
 
 - name: restart cadvisor
   sudo: yes 
@@ -20,13 +20,13 @@
     name: "{{ cadvisor_service }}"
     state: restarted
   tags: 
-    - cadvisor
+    - monitoring
 
 - name: reload systemd daemon
   sudo: yes 
   command: /bin/systemctl daemon-reload
   tags: 
-    - collectd 
+    - monitoring 
 
 - name: register collectd service
   sudo: yes 
@@ -35,7 +35,7 @@
     name: "{{ collectd_service }}"
     state: started 
   tags:  
-    - collectd  
+    - monitoring  
 
 - name: restart collectd
   sudo: yes 
@@ -43,4 +43,4 @@
     name: "{{ collectd_service }}"
     state: restarted
   tags: 
-    - collectd
+    - monitoring
