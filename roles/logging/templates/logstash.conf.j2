@@ -1,4 +1,11 @@
 input {
+{% if logstash_input_log4j %}
+  log4j {
+    mode => "server"
+    port => {{ logstash_log4j_port }}
+    type => "log4j"
+  }
+{% endif %}
 {% if logstash_input_docker %}
   file {
     path => "{{ logstash_docker_logs }}/*/*-json.log"
@@ -13,23 +20,31 @@ input {
 {% endif %}
 {% if logstash_input_syslog %}
   syslog {
-    port => 5514
+    port => {{ logstash_syslog_port }}
     type => "syslog"
   }
 {% endif %}
 {% if logstash_input_collectd %}
   udp {
     codec => "collectd"
-    port => 25826
+    port => {{ logstash_collectd_port }}
     type => "collectd"
   }
 {% endif %}
 }
 
 output {
-{% if logstash_output_stdout %}
-  stdout {
-    codec => rubydebug
+{% if logstash_output_webhdfs %}
+  webhdfs {
+    workers => 2
+    server => "{{ logstash_webhdfs_host }}:{{ logstash_webhdfs_port }}"
+    user => "{{ logstash_webhdfs_user }}"
+    path => "/logs/%{host}/logstash-%{+YYYY-MM-dd}.log"
+    flush_size => 500
+    compress => "gzip"
+    idle_flush_time => 10
+    retry_interval => 0.5
+    retry_times => 3
   }
 {% endif %}
 {% if logstash_output_logentries %}

@@ -1,9 +1,10 @@
 ---
 # Manage Logstash containers
+logstash_input_log4j: yes
 logstash_input_docker: yes
 logstash_input_mesos: yes
 logstash_input_syslog: yes
 logstash_input_collectd: yes
-logstash_output_stdout: yes
+logstash_output_webhdfs: yes
 logstash_output_logentries: no
 logstash_logentries_token: no
