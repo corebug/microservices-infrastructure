@@ -1,6 +1,7 @@
 input {
 {% if logstash_input_log4j %}
   log4j {
+    add_field => { "docker_host" => "{{ ansible_hostname }}" }
     mode => "server"
     port => {{ logstash_log4j_port }}
     type => "log4j"
@@ -8,26 +9,28 @@ input {
 {% endif %}
 {% if logstash_input_docker %}
   file {
-    add_field => { "host" => "{{ ansible_hostname }}" }
+    add_field => { "docker_host" => "{{ ansible_hostname }}" }
     path => "{{ logstash_docker_logs }}/*/*-json.log"
     type => "docker_log"
   }
 {% endif %}
 {% if logstash_input_mesos %}
   file {
-    add_field => { "host" => "{{ ansible_hostname }}" }
+    add_field => { "docker_host" => "{{ ansible_hostname }}" }
     path => "{{ logstash_mesos_logs }}/*"
     type => "mesos_log"
   }
 {% endif %}
 {% if logstash_input_syslog %}
   syslog {
+    add_field => { "docker_host" => "{{ ansible_hostname }}" }
     port => {{ logstash_syslog_port }}
     type => "syslog"
   }
 {% endif %}
 {% if logstash_input_collectd %}
   udp {
+    add_field => { "docker_host" => "{{ ansible_hostname }}" }
     codec => "collectd"
     port => {{ logstash_collectd_port }}
     type => "collectd"
@@ -41,7 +44,7 @@ output {
     workers => 2
     server => "{{ logstash_webhdfs_host }}:{{ logstash_webhdfs_port }}"
     user => "{{ logstash_webhdfs_user }}"
-    path => "/logs/%{host}/logstash-%{type}-%{+YYYY-MM-dd}.log"
+    path => "/logs/%{docker_host}/logstash-%{type}-%{+YYYY-MM-dd}.log"
     flush_size => 500
     compress => "gzip"
     idle_flush_time => 10
