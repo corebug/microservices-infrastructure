@@ -8,12 +8,14 @@ input {
 {% endif %}
 {% if logstash_input_docker %}
   file {
+    add_field => { "host" => "{{ ansible_hostname }}" }
     path => "{{ logstash_docker_logs }}/*/*-json.log"
     type => "docker_log"
   }
 {% endif %}
 {% if logstash_input_mesos %}
   file {
+    add_field => { "host" => "{{ ansible_hostname }}" }
     path => "{{ logstash_mesos_logs }}/*"
     type => "mesos_log"
   }
@@ -39,7 +41,7 @@ output {
     workers => 2
     server => "{{ logstash_webhdfs_host }}:{{ logstash_webhdfs_port }}"
     user => "{{ logstash_webhdfs_user }}"
-    path => "/logs/%{host}/logstash-%{+YYYY-MM-dd}.log"
+    path => "/logs/%{host}/logstash-%{type}-%{+YYYY-MM-dd}.log"
     flush_size => 500
     compress => "gzip"
     idle_flush_time => 10
